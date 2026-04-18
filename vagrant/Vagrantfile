@@ -1,0 +1,28 @@
+Vagrant.configure("2") do |config|
+  
+  config.vm.box = "generic/debian12"
+
+  # Configuration globale
+  config.vm.provider :libvirt do |libvirt|
+    libvirt.memory = 2048
+    libvirt.cpus = 2
+  end
+
+  # Serveur ci-prod-fr-01
+  config.vm.define "ciprod" do |ciprod|
+    ciprod.vm.hostname = "ci-prod-fr-01"
+    ciprod.vm.network "private_network", ip: "10.10.45.20"
+  end
+
+  # Serveur web-dev-fr-01
+  config.vm.define "webdev" do |webdev|
+    webdev.vm.hostname = "web-dev-fr-01"
+    webdev.vm.network "private_network", ip: "10.10.45.10"
+  end
+
+  # Serveur web-prod-fr-01
+  config.vm.define "webprod" do |webprod|
+    webprod.vm.hostname = "web-prod-fr-01"
+    webprod.vm.network "private_network", ip: "10.10.45.30"
+  end
+end
