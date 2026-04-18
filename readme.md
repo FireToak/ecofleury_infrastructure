@@ -1,6 +1,6 @@
 # EcoFleury - Infrastructure as Code (IaC)
 
-> ⚠️ Ce dépôt est intimement lié au contexte d'entreprise détaillé dans le fichier [contexte.md](./contexte.md).
+> ⚠️ Ce dépôt est lié au contexte d'entreprise détaillé dans le fichier [contexte.md](./contexte.md).
 
 Ce dépôt contient l'automatisation de l'infrastructure pour le projet **EcoFleury**. Il provisionne, via Vagrant, l'environnement nécessaire à la mise en place d'un pipeline d'intégration et de déploiement continus (CI/CD) avec Jenkins, en respectant les standards de cybersécurité et de nommage.
 
@@ -56,6 +56,8 @@ vagrant up
 ```
 
   * **`vagrant up`** : Lit le fichier `Vagrantfile`, télécharge les images systèmes nécessaires, crée les machines virtuelles, configure le réseau et exécute les scripts d'installation.
+
+---
 
 ## 📚 Ressources et Documentation
 
