@@ -8,10 +8,19 @@ Vagrant.configure("2") do |config|
     libvirt.cpus = 2
   end
 
-  # Serveur ci-prod-fr-01
-  config.vm.define "ciprod" do |ciprod|
-    ciprod.vm.hostname = "ci-prod-fr-01"
-    ciprod.vm.network "private_network", ip: "10.10.45.20"
+  # Serveur code-prod-fr-01
+  config.vm.define "codeprod" do |codeprod|
+    codeprod.vm.hostname = "code-prod-fr-01"
+    codeprod.vm.network "private_network", ip: "10.10.45.20"
+
+    # Installation des conteneurs Gitea et Jenkins. Ce code respecte pas les bonnes pratiques et est purement pour du test !
+    codeprod.vm.provision "shell", inline: <<-SHELL
+      apt update
+      apt install -y docker.io
+
+      docker run -d --name gitea -p 3000:3000 -v gitea_data:/data gitea/gitea:latest
+      docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v jenkins_data:/var/jenkins_home jenkins/jenkins:lts
+    SHELL
   end
 
   # Serveur web-dev-fr-01
