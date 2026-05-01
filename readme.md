@@ -64,6 +64,8 @@ vagrant up
   * [Tableau de bord - Jenkins](http://10.10.45.20:8080/)
   * [Tableau de bord - Gitea](http://10.10.45.20:3000/)
 
+---
+
 ## 📚 Ressources et Documentation
 
   * [Documentation sur Vagrant - Stephane Robert](https://blog.stephane-robert.info/docs/infra-as-code/provisionnement/vagrant/)
