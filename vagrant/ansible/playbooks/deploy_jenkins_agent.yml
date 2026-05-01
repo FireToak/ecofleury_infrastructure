@@ -1,0 +1,16 @@
+# ---
+# Titre       : Playbook - Déploiement de l'agent Jenkins
+# Auteur      : Louis MEDO
+# Date        : 01/05/2026
+# Rôle        : Déploiement de l'agent Jenkins
+# ---
+---
+
+- name: Deploiement de l'agent Jenkins
+  hosts: jenkins-agent-prod
+  become: true
+
+  roles:
+    - common
+    - docker
+    - jenkins_agent

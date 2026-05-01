@@ -1,0 +1,16 @@
+# ---
+# Titre       : Playbook - Déploiement de l'environnement code
+# Auteur      : Louis MEDO
+# Date        : 01/05/2026
+# Rôle        : Déploiement de Docker avec les conteneurs de Jenkins et Gitea
+# ---
+---
+
+- name: Déploiement de l'environnement de code
+  hosts: code-prod
+  become: true
+
+  roles:
+    - common
+    - docker
+    - code

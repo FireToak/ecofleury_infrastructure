@@ -1,0 +1,81 @@
+# ---
+# Titre       : ROLE - Common
+# Auteur      : Louis MEDO - louis.medo@loutik.fr
+# Date        : 14/04/2026
+# Rôle        : Initialiser le socle de sécurité et les paquets de base
+# https://docs.ansible.com/projects/ansible/latest/collections/ansible/posix/authorized_key_module.html
+# https://docs.ansible.com/projects/ansible/latest/collections/community/general/timezone_module.html
+# ---
+---
+- name: Mettre à jour le cache et tout le système (apt update & upgrade)
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+    upgrade: dist
+
+- name: Installer les utilitaires d'administration de base
+  ansible.builtin.apt:
+    name:
+      - curl
+      - wget
+      - vim
+      - htop
+      - acl
+      - git
+      - sudo
+    state: present
+
+- name: Création de l'utilisateur jenkins
+  ansible.builtin.user:
+    name: jenkins
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+
+- name: Autoriser l'utilisateur jenkins à utiliser sudo sans mot de passe
+  ansible.builtin.copy:
+    content: "jenkins ALL=(ALL) NOPASSWD:ALL"
+    dest: /etc/sudoers.d/jenkins
+    mode: '0440'
+    validate: 'visudo -cf %s'
+
+- name: Créer les comptes administrateurs
+  ansible.builtin.user:
+    name: "{{ item.name }}"
+    groups: "{{ item.groups | join(',') }}"
+    state: present
+    create_home: yes
+  loop: "{{ admin_users }}"
+
+- name: Déposer la clé SSH (depuis URL ou texte)
+  ansible.posix.authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ item.ssh_key_source }}"
+  loop: "{{ admin_users }}"
+
+- name: Configuration de l'heure
+  community.general.timezone:
+    name: Europe/Paris
+
+- name: Sécurisation du service SSH - Interdire le login Root
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PermitRootLogin'
+    line: 'PermitRootLogin no'
+    state: present
+  notify: restart_ssh
+
+- name: Sécurisation du service SSH - Désactiver l'authentification par mot de passe
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    state: present
+  notify: restart_ssh
+
+- name: Définir Vim comme éditeur par défaut du système
+  ansible.builtin.command:
+    cmd: update-alternatives --set editor /usr/bin/vim.basic
+  register: result
+  changed_when: "'using /usr/bin/vim.basic' not in result.stdout"

@@ -1,0 +1,8 @@
+admin_users:
+  - name: louismedo
+    ssh_key_source: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1vgvvfFneINaBeobJbge0uVkr7d6VtYuKPKN3yEUXD louis.medo@loutik.fr"
+    groups: ["sudo"]
+
+  - name: maximegaud
+    ssh_key_source: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM1vgvvfFneINaBeobJbge0uVkr7d6VtYuKPKN3yEUXD louis.medo@loutik.fr"
+    groups: ["sudo"]

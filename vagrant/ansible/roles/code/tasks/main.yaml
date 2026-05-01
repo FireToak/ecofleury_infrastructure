@@ -1,0 +1,31 @@
+---
+- name: Créer le répertoire de l'application EcoFleury Tools
+  ansible.builtin.file:
+    path: /opt/ecofleury-tools
+    state: directory
+    mode: '0755'
+    owner: jenkins
+    group: jenkins
+
+- name: Copier le fichier Docker Compose sur le serveur
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: /opt/ecofleury-tools/docker-compose.yml
+    mode: '0644'
+
+- name: Création des volumes docker avec les bonnes permissions
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "1000"
+    group: "1000"
+    mode: '0755'
+  loop:
+    - /opt/ecofleury-tools/gitea_data
+    - /opt/ecofleury-tools/jenkins_data
+
+- name: Lancer les services Gitea et Jenkins via Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /opt/ecofleury-tools
+    state: present
+    pull: always

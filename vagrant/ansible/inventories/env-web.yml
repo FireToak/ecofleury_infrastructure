@@ -1,0 +1,17 @@
+# ---
+# Titre       : Hosts - Développement
+# Auteur      : Louis MEDO
+# Date        : 31/01/2026
+# Rôle        : Contient la liste des serveurs de développement
+# ---
+---
+all:
+  children:
+    web-dev:
+      hosts:
+        web-dev-fr-01:
+          ansible_host: 10.10.45.10
+    web-prod:
+      hosts:
+        web-prod-fr-01:
+          ansible_host: 10.10.45.30

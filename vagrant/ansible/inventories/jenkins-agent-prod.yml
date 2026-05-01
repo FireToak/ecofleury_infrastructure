@@ -1,0 +1,13 @@
+# ---
+# Titre       : Hosts - codeprod
+# Auteur      : Louis MEDO
+# Date        : 01/05/2026
+# Rôle        : Contient la liste des serveurs de contenant le code et la CI/CD
+# ---
+---
+all:
+  children:
+    jenkins-agent-prod:
+      hosts:
+        jenkins-agent-prod-fr-01:
+          ansible_host: 10.10.45.21

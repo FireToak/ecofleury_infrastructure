@@ -19,12 +19,19 @@ Les machines virtuelles déployées simulent une architecture d'entreprise segme
 ## 📂 Organisation du dépôt
 
 ```text
-.ecofleury_infrastructure
-├── contexte.md      # Détails du cas d'étude métier et technique
-├── README.md        # Documentation principale du dépôt
-├── secret.md        # (Attention : les secrets ne doivent jamais être commités en production réel)
-└── vagrant/         # Dossier contenant l'automatisation de l'infrastructure
-    └── Vagrantfile  # Fichier de configuration pour le provisionnement des VMs
+ecofleury_infrastructure/
+├── readme.md                    # Documentation principale du projet
+├── docs/                        # Dossier contenant la documentation du projet
+│   └── contexte.md              # Détails du cas d'étude métier et technique
+└── vagrant/                     # Dossier contenant l'infrastructure du projet
+    ├── Vagrantfile              # Configuration pour le provisionnement des VMs
+    └── ansible/                 # Scripts et configurations Ansible
+        ├── ansible.cfg          # Configuration globale d'Ansible
+        ├── requirements.yml     # Dépendances des collections Ansible
+        ├── inventories/         # Définition des inventaires et groupes d'hôtes
+        ├── playbooks/           # Playbooks pour le déploiement automatisé
+        ├── roles/               # Rôles Ansible réutilisables
+        └── secrets/             # Secrets chiffrés (Ansible Vault)
 ```
 
 ---
@@ -48,6 +55,14 @@ cd vagrant
 ```
 
   * **`cd`** (Change Directory) : Permet de naviguer dans le dossier cible contenant le fichier `Vagrantfile`.
+
+3. **Installation des collection Ansible du projet**
+
+```bash
+ansible-galaxy collection install -r ansible/requirements.yml
+```
+
+  * **`ansible-galaxy`** : Permet d'interagir avec Ansible Galaxy, une plateforme communautaire regroupant des rôles et des collections pré-écrits.
 
 3. **Lancer le provisionnement de l'infrastructure**
 

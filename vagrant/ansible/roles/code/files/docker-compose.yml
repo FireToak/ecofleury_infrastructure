@@ -1,0 +1,23 @@
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    ports:
+      - "3000:3000"
+      - "222:22"
+    volumes:
+      - /opt/ecofleury-tools/gitea_data:/data
+    restart: always
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    user: "1000:996"
+    group_add:
+      - "996"
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - /opt/ecofleury-tools/jenkins_data:/var/jenkins_home
+    restart: always

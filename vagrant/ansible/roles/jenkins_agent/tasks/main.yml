@@ -1,0 +1,59 @@
+---
+
+- name: Installer les dépendances pour Java
+  ansible.builtin.apt:
+    name: 
+      - wget
+      - apt-transport-https
+      - gnupg
+    state: present
+
+- name: Ajouter la clé GPG d'Adoptium
+  ansible.builtin.apt_key:
+    url: https://packages.adoptium.net/artifactory/api/gpg/key/public
+    state: present
+
+- name: Ajouter le dépôt Adoptium
+  ansible.builtin.apt_repository:
+    repo: "deb https://packages.adoptium.net/artifactory/deb bookworm main"
+    state: present
+    update_cache: yes
+
+- name: Installer Java 21 (Temurin)
+  ansible.builtin.apt:
+    name: temurin-21-jdk
+    state: present
+
+- name: Créer le groupe jenkins
+  ansible.builtin.group:
+    name: jenkins
+    state: present
+
+- name: Créer l'utilisateur jenkins
+  ansible.builtin.user:
+    name: jenkins
+    group: jenkins
+    shell: /bin/bash
+    home: /home/jenkins
+    create_home: yes
+    state: present
+
+- name: Créer le répertoire de travail de l'agent
+  ansible.builtin.file:
+    path: /var/jenkins
+    state: directory
+    owner: jenkins
+    group: jenkins
+    mode: '0755'
+
+- name: Ajout de l'utilisateur jenkins au groupe Docker
+  ansible.builtin.user:
+    name: jenkins
+    groups: docker
+    append: yes
+
+- name: Déposer la clé SSH publique pour le Maître Jenkins
+  ansible.posix.authorized_key:
+    user: jenkins
+    state: present
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG95Ri8NjGbTgA0v6/9uQCsS84EQO7VwxlDtNi9WRPHB jenkins"

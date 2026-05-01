@@ -12,26 +12,47 @@ Vagrant.configure("2") do |config|
   config.vm.define "codeprod" do |codeprod|
     codeprod.vm.hostname = "code-prod-fr-01"
     codeprod.vm.network "private_network", ip: "10.10.45.20"
+    codeprod.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./ansible/playbooks/deploy_env-code.yml"
+      ansible.inventory_path = "./ansible/inventories"
+      ansible.limit = "code-prod"
+      ansible.galaxy_roles_path = "./ansible/roles"
+    end
+  end
 
-    # Installation des conteneurs Gitea et Jenkins. Ce code respecte pas les bonnes pratiques et est purement pour du test !
-    codeprod.vm.provision "shell", inline: <<-SHELL
-      apt update
-      apt install -y docker.io
-
-      docker run -d --name gitea -p 3000:3000 -v gitea_data:/data gitea/gitea:latest
-      docker run -d --name jenkins -p 8080:8080 -p 50000:50000 -v jenkins_data:/var/jenkins_home jenkins/jenkins:lts
-    SHELL
+  # Serveur jenkins-agent-prod-fr-01
+  config.vm.define "jenkinsagentprod" do |jenkinsagentprod|
+    jenkinsagentprod.vm.hostname = "jenkins-agent-prod-fr-01"
+    jenkinsagentprod.vm.network "private_network", ip: "10.10.45.21"
+    jenkinsagentprod.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./ansible/playbooks/deploy_jenkins_agent.yml"
+      ansible.inventory_path = "./ansible/inventories"
+      ansible.limit = "jenkins-agent-prod"
+      ansible.galaxy_roles_path = "./ansible/roles"
+    end
   end
 
   # Serveur web-dev-fr-01
   config.vm.define "webdev" do |webdev|
     webdev.vm.hostname = "web-dev-fr-01"
     webdev.vm.network "private_network", ip: "10.10.45.10"
+    webdev.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./ansible/playbooks/deploy_env-web.yml"
+      ansible.inventory_path = "./ansible/inventories"
+      ansible.limit = "web-dev"
+      ansible.galaxy_roles_path = "./ansible/roles"
+    end
   end
 
   # Serveur web-prod-fr-01
   config.vm.define "webprod" do |webprod|
     webprod.vm.hostname = "web-prod-fr-01"
     webprod.vm.network "private_network", ip: "10.10.45.30"
+    webprod.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./ansible/playbooks/deploy_env-web.yml"
+      ansible.inventory_path = "./ansible/inventories"
+      ansible.limit = "web-prod"
+      ansible.galaxy_roles_path = "./ansible/roles"
+    end
   end
 end

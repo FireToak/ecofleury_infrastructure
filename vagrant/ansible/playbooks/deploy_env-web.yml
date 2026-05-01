@@ -1,0 +1,18 @@
+# ---
+# Titre       : Playbook - Déploiement de l'environnement WEB
+# Auteur      : Louis MEDO
+# Date        : 01/05/2026
+# Rôle        : Déploiement de l'environnement WEB des serveurs avec la configuration de Docker.
+# ---
+---
+
+- name: Déploiement de l'environnement WEB
+  hosts: 
+    - web-dev
+    - web-prod
+  become: true
+
+  roles:
+    - common
+    - docker
+    - web_env
