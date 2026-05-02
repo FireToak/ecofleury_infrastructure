@@ -7,7 +7,7 @@
 ---
 all:
   children:
-    jenkins-agent-prod:
+    ci-jenkins-prod:
       hosts:
-        jenkins-agent-prod-fr-01:
+        ci-jenkins-prod-fr-01:
           ansible_host: 10.10.45.21

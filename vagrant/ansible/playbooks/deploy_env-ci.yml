@@ -7,7 +7,7 @@
 ---
 
 - name: Deploiement de l'agent Jenkins
-  hosts: jenkins-agent-prod
+  hosts: ci-jenkins-prod
   become: true
 
   roles:

@@ -20,14 +20,14 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Serveur jenkins-agent-prod-fr-01
-  config.vm.define "jenkinsagentprod" do |jenkinsagentprod|
-    jenkinsagentprod.vm.hostname = "jenkins-agent-prod-fr-01"
-    jenkinsagentprod.vm.network "private_network", ip: "10.10.45.21"
-    jenkinsagentprod.vm.provision "ansible" do |ansible|
-      ansible.playbook = "./ansible/playbooks/deploy_jenkins_agent.yml"
+  # Serveur ci-prod-fr-01
+  config.vm.define "ciprod" do |ciprod|
+    ciprod.vm.hostname = "ci-prod-fr-01"
+    ciprod.vm.network "private_network", ip: "10.10.45.21"
+    ciprod.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./ansible/playbooks/deploy_env-ci.yml"
       ansible.inventory_path = "./ansible/inventories"
-      ansible.limit = "jenkins-agent-prod"
+      ansible.limit = "ci-jenkins-prod"
       ansible.galaxy_roles_path = "./ansible/roles"
     end
   end
